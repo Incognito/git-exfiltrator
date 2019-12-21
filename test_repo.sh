@@ -40,4 +40,8 @@ git commit -m"Adds a/3"
 
 git checkout feature-branch
 
-git lg --all
+echo "------------------"
+# runs git-forceps
+../git-forceps master feature-branch "b/*"
+git lg --all --stat
+

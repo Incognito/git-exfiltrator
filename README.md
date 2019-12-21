@@ -50,4 +50,99 @@ the entire file into a new branch.
    1 file changed, 1 insertion(+)
 ```
 
+After running git forceps to extract the b folder:
+```
+../git-forceps master feature-branch "b/*"
+```
 
+The `-extracted` branch will be merged into master. Note that the extracted
+branch has an unrelated history from the original `feature-branch`. This means
+master has all of folder `b`, and a complete timeline of changes related to b,
+but none of the work from `a` or `c` is included.
+
+
+```
+*   34d518c  (master)
+|\
+| * 166931a  (feature-branch-extracted)
+| |
+| |  b/b2 | 1 +
+| |  1 file changed, 1 insertion(+)
+| * aab8a36
+| |
+| |  b/b1 | 1 +
+| |  1 file changed, 1 insertion(+)
+| * aa531d8
+| * 844c676
+* 75d4261
+|
+|  a/3 | 0
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| * c5b2f25  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
+| |
+| |  b/b2 | 1 +
+| |  c/c2 | 1 +
+| |  2 files changed, 2 insertions(+)
+| * 8320ea7
+|/
+|
+|    a/a1 | 1 +
+|    b/b1 | 1 +
+|    c/c1 | 1 +
+|    3 files changed, 3 insertions(+)
+* 85a89b2
+|
+|  a/2 | 1 +
+|  1 file changed, 1 insertion(+)
+* 900b39c
+
+   a/1 | 1 +
+   1 file changed, 1 insertion(+)
+```
+
+For the final step, feature-branch is now ready for merging into master. Simply
+`git merge feature-branch` from `master` as you normally would.
+
+
+
+```
+Merge made by the 'recursive' strategy.
+ a/a1 | 1 +
+ c/c1 | 1 +
+ c/c2 | 1 +
+ 3 files changed, 3 insertions(+)
+ create mode 100644 a/a1
+ create mode 100644 c/c1
+ create mode 100644 c/c2
+```
+
+Resulting in a master that has all work in it.
+
+
+```
+*   7e3ae5e  (master)
+|\
+| * c5b2f25  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
+| * 8320ea7
+* |   34d518c
+|\ \
+| * | 166931a  (feature-branch-extracted)
+| * | aab8a36
+| * | aa531d8
+| * | 844c676
+|  /
+* | 75d4261
+|/
+* 85a89b2
+* 900b39c
+
+```
+
+# Uses
+todo
+
+# Drawbacks
+todo
+
+# Thoughts
+todo

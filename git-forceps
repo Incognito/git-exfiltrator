@@ -1,0 +1,24 @@
+#!/bin/sh
+
+destinationRef=$1
+originRef=$2
+pathspec=$3
+test -z "$destinationRef" && echo "ERROR: Please provide the destination reference." 1>&2 && exit 1
+test -z "$originRef" && echo "ERROR: Please provide the origin reference." 1>&2 && exit 1
+test -z "$pathspec" && echo "ERROR: Please provide the paths to be extracted." 1>&2 && exit 1
+
+echo $destinationRef
+echo $originRef
+echo $pathspec
+
+git checkout $originRef
+
+git checkout -b $originRef-extracted
+
+git filter-branch --index-filter \
+  "git ls-files | grep -Ev $pathspec | xargs git rm --cached" HEAD
+
+git checkout $destinationRef
+git merge $originRef-extracted --no-edit --allow-unrelated-histories
+
+
