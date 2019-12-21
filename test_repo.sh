@@ -41,7 +41,7 @@ git commit -m"Adds a/3"
 git checkout feature-branch
 
 echo "------------------"
-# runs git-forceps
-../git-forceps master feature-branch "b/*"
+# runs git-exfiltrate
+../git-exfiltrate master feature-branch "b/*"
 git lg --all --stat
 

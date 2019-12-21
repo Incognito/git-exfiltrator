@@ -1,6 +1,6 @@
 # Usage
 
-git forcep [--against=<against-ref>] [--subject=<subject-ref>] [--] [<pathspec>...]
+git exfiltrator [--against=<against-ref>] [--subject=<subject-ref>] [--] [<pathspec>...]
 
  - `--against` defines the target to merge towards.
  - `--subject` defines the subject branch that files will be extracted from
@@ -17,7 +17,7 @@ too many parts of the code (See "uses" below). Consider this trivial example
 where a feature changes folders `a`, `b`, and `c` inside of commits 46f8642 and
 d967302.
 
-Using git-forceps you can extract an entire folder (for example, `b`) into a
+Using git-exfiltrate you can extract an entire folder (for example, `b`) into a
 new branch which will reduce the impact of merging to master, but still
 maintain somewhat of a logical commit history (without havint to cut+paste in
 the entire file into a new branch.
@@ -50,9 +50,9 @@ the entire file into a new branch.
    1 file changed, 1 insertion(+)
 ```
 
-After running git forceps to extract the b folder:
+After running git exfiltrator to extract the b folder:
 ```
-../git-forceps master feature-branch "b/*"
+../git-exfiltrate master feature-branch "b/*"
 ```
 
 The `-extracted` branch will be merged into master. Note that the extracted
