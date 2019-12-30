@@ -3,10 +3,10 @@
 ```
 git exfiltrator <against-ref> <subject-ref> <pathspec>
 
- - `<against>` defines the target to merge towards.
- - `<subject>` defines the subject branch that files will be extracted from
- - `<pathspec>` same as in `git add`, except only able to add files that exist
-   between the `subject` and the `against` target.
+ - <against> defines the target to merge towards.
+ - <subject> defines the subject branch that files will be extracted from
+ - <pathspec> same as in `git add`, except only able to add files that exist
+   between the <subject> and the <against> target found in each commit.
 ```
 
 # Known Uses
