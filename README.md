@@ -26,6 +26,16 @@ git exfiltrator <against-ref> <subject-ref> <pathspec>
 - Commit messages will be duplicated into the extracted branch.
 - Operator should know how a git-tree works.
 
+# Installation 
+
+You can install the script using this repo to keep things versioned correctly, or you can try and do it the hack way.
+
+Hacky way: Cut+paste the script to your home folder and run the bash script whenever you want to use it.
+
+Supported way: Clone the repo to your home folder. Make your `$PATH` envvar able to resolve this script. Once you do, git will understand `git exfiltrate` (without the `-`) anywhere you want to use it. Then add this repo to your watchlist/subscriptions on GitHub so you know when/if I provide any updates or useful improvements.
+
+(If someone would like to maintain a `.deb` or `brew` dependency I'd be happy to link to it.)
+
 # Example
 
 [![asciicast](https://asciinema.org/a/OwPrRxKT0IHauAdgXZ5p74naT.svg)](https://asciinema.org/a/OwPrRxKT0IHauAdgXZ5p74naT)
