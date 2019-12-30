@@ -1,148 +1,111 @@
 # Usage
 
-git exfiltrator [--against=<against-ref>] [--subject=<subject-ref>] [--] [<pathspec>...]
-
- - `--against` defines the target to merge towards.
- - `--subject` defines the subject branch that files will be extracted from
+git exfiltrator <against-ref> <subject-ref> <pathspec>
+ - `<against>` defines the target to merge towards.
+ - `<subject>` defines the subject branch that files will be extracted from
  - `<pathspec>` same as in `git add`, except only able to add files that exist
-   between the subget and the against target.
+   between the `subject` and the `against` target.
 
+# Known Uses
+- Breaking up a large branch or Pull Request into many smaller ones.
+- Releasing (or moving) code that is "ready" without waiting for code that is
+  "not ready"
+- Wanting to remove some feature or migrate development to another branch
+  without losing history.
 
+# Benefits
+- A late stage fix to development processes which generate massive PRs instead
+  of many small PRs.
+- Keeping history of work migrated to a new branch.
+- Avoid using primitive cut+paste techniques.
 
-# Solves this problem
+# Known Drawbacks
+- Commit messages will be duplicated into the extracted branch.
+- Operator should know how a git-tree works.
 
+# Example
 
-You're faced with a large `feature-branch` and it's making too many changes to
-too many parts of the code (See "uses" below). Consider this trivial example
-where a feature changes folders `a`, `b`, and `c` inside of commits 46f8642 and
-d967302.
+Imagine you're faced with a large `feature-branch` and it's making too many
+changes to too many parts of the code (See "uses" below). Consider this trivial
+example where a feature changes folders `a`, `b`, and `c` inside of commits
+`46f8642 (feature-branch)` and `d967302`.
 
 Using git-exfiltrate you can extract an entire folder (for example, `b`) into a
-new branch which will reduce the impact of merging to master, but still
-maintain somewhat of a logical commit history (without havint to cut+paste in
-the entire file into a new branch.
-
+new branch which will reduce the impact of merging to master, and still
+maintain a logical commit history.
 
 ```
 * 63caf00  (master)
-| 
 |  a/3 | 0
-|  1 file changed, 0 insertions(+), 0 deletions(-)
 | * 46f8642  (feature-branch)
-| | 
 | |  b/b2 | 1 +
 | |  c/c2 | 1 +
-| |  2 files changed, 2 insertions(+)
 | * d967302
-|/  
-|   
+|/
 |    a/a1 | 1 +
 |    b/b1 | 1 +
 |    c/c1 | 1 +
-|    3 files changed, 3 insertions(+)
 * 8ba0e15
-| 
 |  a/2 | 1 +
-|  1 file changed, 1 insertion(+)
 * 8f5255d
-  
    a/1 | 1 +
-   1 file changed, 1 insertion(+)
 ```
 
-After running git exfiltrator to extract the b folder:
-```
-../git-exfiltrate master feature-branch "b/*"
-```
-
-The `-extracted` branch will be merged into master. Note that the extracted
-branch has an unrelated history from the original `feature-branch`. This means
-master has all of folder `b`, and a complete timeline of changes related to b,
-but none of the work from `a` or `c` is included.
-
+Run git exfiltrator to extract the `b` folder into a new "extract" branch:
 
 ```
-*   34d518c  (master)
+./git-exfiltrate master feature-branch "b/*"
+```
+
+The `-extracted` branch will be merged into the `subject` argument provided.
+Note that the extracted branch has an unrelated history from the original
+`feature-branch`. This means master has all of folder `b`, and a complete
+timeline of changes related to `b`, but none of the work from `a` or `c` is
+included.
+
+```
+*   e01009e  (master)
 |\
-| * 166931a  (feature-branch-extracted)
-| |
-| |  b/b2 | 1 +
-| |  1 file changed, 1 insertion(+)
-| * aab8a36
-| |
-| |  b/b1 | 1 +
-| |  1 file changed, 1 insertion(+)
-| * aa531d8
-| * 844c676
-* 75d4261
-|
-|  a/3 | 0
-|  1 file changed, 0 insertions(+), 0 deletions(-)
-| * c5b2f25  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
-| |
-| |  b/b2 | 1 +
-| |  c/c2 | 1 +
-| |  2 files changed, 2 insertions(+)
-| * 8320ea7
+| * ce4ca64  (feature-branch-extracted)
+| * f3bf092
+* | 4b2ebd6
 |/
-|
-|    a/a1 | 1 +
-|    b/b1 | 1 +
-|    c/c1 | 1 +
-|    3 files changed, 3 insertions(+)
-* 85a89b2
-|
-|  a/2 | 1 +
-|  1 file changed, 1 insertion(+)
-* 900b39c
-
-   a/1 | 1 +
-   1 file changed, 1 insertion(+)
+| * d4c374e  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
+| * 4724dbb
+|/
+* 927799f
+* 219e9b2
 ```
 
-For the final step, feature-branch is now ready for merging into master. Simply
-`git merge feature-branch` from `master` as you normally would.
+Typically the next step might be merging the rest of `feature-branch` into
+master. Simply `git merge feature-branch` from `master` as you normally would.
 
-
-
-```
-Merge made by the 'recursive' strategy.
- a/a1 | 1 +
- c/c1 | 1 +
- c/c2 | 1 +
- 3 files changed, 3 insertions(+)
- create mode 100644 a/a1
- create mode 100644 c/c1
- create mode 100644 c/c2
-```
-
-Resulting in a master that has all work in it.
-
+> Note: This step is not required to use the tool, and not the only correct way
+> to use the tool. This is simply a common task which users of this tool will
+> perform.
 
 ```
-*   7e3ae5e  (master)
+*   078f69a  (master)
 |\
-| * c5b2f25  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
-| * 8320ea7
-* |   34d518c
+| * d4c374e  (refs/original/refs/heads/feature-branch-extracted, feature-branch)
+| * 4724dbb
+* |   e01009e
 |\ \
-| * | 166931a  (feature-branch-extracted)
-| * | aab8a36
-| * | aa531d8
-| * | 844c676
-|  /
-* | 75d4261
+| * | ce4ca64  (feature-branch-extracted)
+| * | f3bf092
+| |/
+* | 4b2ebd6
 |/
-* 85a89b2
-* 900b39c
-
+* 927799f
+* 219e9b2
 ```
 
-# Uses
-todo
+# Regrets
+I wish I didn't have to create this tool. The reality is that most of this
+industry is writing massive PRs which are difficult to work with. Changing the
+default "development mindset" of developers and software managers *globally* is
+a hard task. I can't fix the industry with a bash script, but I can fix a git
+branch.
 
-# Drawbacks
-todo
-
-# Thoughts
-todo
+I hope one day our entire industry (not just some pockets of it) will fully
+embrace and be capable of working only in small incremental changes.
