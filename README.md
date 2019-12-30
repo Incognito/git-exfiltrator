@@ -27,27 +27,26 @@ git exfiltrator <against-ref> <subject-ref> <pathspec>
 
 Imagine you're faced with a large `feature-branch` and it's making too many
 changes to too many parts of the code (See "uses" below). Consider this trivial
-example where a feature changes folders `a`, `b`, and `c` inside of commits
-`46f8642 (feature-branch)` and `d967302`.
+example where a feature changes folders `a`, `b`, and `c` inside `feature-branch`.
 
 Using git-exfiltrate you can extract an entire folder (for example, `b`) into a
 new branch which will reduce the impact of merging to master, and still
 maintain a logical commit history.
 
 ```
-* 63caf00  (master)
+*   (master)
 |  a/3 | 0
-| * 46f8642  (feature-branch)
+| *   (feature-branch)
 | |  b/b2 | 1 +
 | |  c/c2 | 1 +
-| * d967302
+| * 
 |/
 |    a/a1 | 1 +
 |    b/b1 | 1 +
 |    c/c1 | 1 +
-* 8ba0e15
+* 
 |  a/2 | 1 +
-* 8f5255d
+* 
    a/1 | 1 +
 ```
 
