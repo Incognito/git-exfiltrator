@@ -28,6 +28,8 @@ git exfiltrator <against-ref> <subject-ref> <pathspec>
 
 # Example
 
+[![asciicast](https://asciinema.org/a/OwPrRxKT0IHauAdgXZ5p74naT.svg)](https://asciinema.org/a/OwPrRxKT0IHauAdgXZ5p74naT)
+
 Imagine you're faced with a large `feature-branch` and it's making too many
 changes to too many parts of the code (See "uses" below). Consider this trivial
 example where a feature changes folders `a`, `b`, and `c` inside `feature-branch`.
