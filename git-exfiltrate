@@ -12,7 +12,7 @@ git checkout "$originRef"
 git checkout -b "$originRef-extracted"
 
 git filter-branch --force --prune-empty --index-filter \
-  "git ls-files | grep -Ev $pathspec | xargs git rm --cached" `git merge-base $destinationRef $originRef`..HEAD
+  "git ls-files | grep -Ev $pathspec | xargs git rm --cached" "$(git merge-base "$destinationRef" "$originRef")..HEAD"
 
 git checkout "$destinationRef"
 git merge "$originRef-extracted" --no-edit --allow-unrelated-histories
